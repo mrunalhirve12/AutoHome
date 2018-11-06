@@ -13,7 +13,7 @@
 
 Although ECE 558 is entitled Embedded Systems Programming all we have produced so far has been software running on an Android device. That’s about to change. Project #3 has both a hardware and a software component to it and provides a chance for you to gain experience building an application for the Internet of Things (IoT). For hardware we will be using a Raspberry PI 3 (RPI3), a few resistors, a tri-color (RGB) LED, a PIC microcontroller, an analog temperature sensor and DC hobbyist motor. You will use your Android device to run an app that shares information with the RPI3 across a WiFi or Bluetooth link. Both the control app running on the RPI3 and the user interface app running on the Android device will be programmed in Java using Android Studio and the Android framework.  
 
-The deliverables for this project will be a demo for the T/A or instructor, a design report for the project, and your Android Studio projects.  You should bring your own hardware to the project.  We will provide WiFi access.
+The deliverables for this project will be a demo for the T/A or instructor, a design report for the project, and your Android Studio projects.  You should bring your own hardware to the demo.  We will provide WiFi access.
 
 We will be using the team project support in GitHub classroom for this assignment.  This means that your team will share a private repository on GitHub that can also be accessed by the instructor and T/A for the course. You will submit your work via a private repository using GitHub classroom.  Our plan is to review your work and provide feedback using GitHub classroom but doing team projects  will be a new experience for us so we'll see how it goes.
 
