@@ -104,43 +104,42 @@
         android:id="@+id/DAC1OUTTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="5dp"
         android:text="@string/dac1out"
-        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintStart_toEndOf="@+id/subButton"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC4ValueTextView" />
 
     <TextView
         android:id="@+id/DAC1OUTValueTextView"
         android:layout_width="60dp"
         android:layout_height="0dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:text="16"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="@+id/DAC1OUTTextView"
+        app:layout_constraintStart_toStartOf="@+id/DAC1OUTTextView"
         app:layout_constraintTop_toBottomOf="@+id/DAC1OUTTextView" />
 
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
         android:text="+"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ChannelADC3ValueTextView"
+        app:layout_constraintStart_toEndOf="@+id/DAC1OUTTextView"
+        app:layout_constraintTop_toBottomOf="@+id/ChannelADC5ValueTextView"
         tools:text="+" />
 
     <Button
         android:id="@+id/subButton"
         android:layout_width="89dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="-"
-        app:layout_constraintStart_toEndOf="@+id/DAC1OUTValueTextView"
-        app:layout_constraintTop_toBottomOf="@+id/ChannelADC5ValueTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ChannelADC3ValueTextView"
         tools:text="-" />
 
     <TextView
