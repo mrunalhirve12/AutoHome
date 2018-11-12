@@ -49,6 +49,10 @@ public class MainActivity extends Activity {
     DatabaseReference mPwm5DbRef;
     DatabaseReference mPwm6DbRef;
     DatabaseReference mTempDbRef;
+    DatabaseReference mDac1OutDbRef;
+    DatabaseReference mAdc3In;
+    DatabaseReference mAdc4In;
+    DatabaseReference mAdc5In;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,10 @@ public class MainActivity extends Activity {
         mPwm5DbRef = mDbRef.child("PWM5");
         mPwm6DbRef = mDbRef.child("PWM6");
         mTempDbRef = mDbRef.child("ADA5IN");
+        mDac1OutDbRef = mDbRef.child("DAC1OUT");
+        mAdc3In = mDbRef.child("ADC3IN");
+        mAdc4In = mDbRef.child("ADC4IN");
+        mAdc5In = mDbRef.child("ADC5IN");
 
         mPwm3DbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,6 +86,7 @@ public class MainActivity extends Activity {
                     mDevice.writeRegByte(0x00, (byte) pwm3);
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM3");
+                    e.printStackTrace();
                 }
             }
 
@@ -95,6 +104,7 @@ public class MainActivity extends Activity {
                     mDevice.writeRegByte(0x01, (byte) pwm4);
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM4");
+                    e.printStackTrace();
                 }
             }
 
@@ -112,6 +122,7 @@ public class MainActivity extends Activity {
                     mDevice.writeRegByte(0x02, (byte) pwm5);
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM5");
+                    e.printStackTrace();
                 }
             }
 
@@ -121,15 +132,35 @@ public class MainActivity extends Activity {
             }
         });
 
+        mDac1OutDbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int dac1Out = dataSnapshot.getValue(Integer.class);
+                try {
+                    Log.d(TAG, "DAC1OUT: " + (byte) dac1Out);
+                    mDevice.writeRegByte(0x04, (byte) dac1Out);
+                } catch (IOException e) {
+                    Log.d(TAG, "Failed to write to PWM5");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     while (true) {
-                        int lsb = (int) mDevice.readRegByte(0x05);
-                        int msb = (int) mDevice.readRegByte(0x06);
+                        byte[] b = new byte[2];
+                        b[0] = mDevice.readRegByte(0x05);
+                        b[1] = mDevice.readRegByte(0x06);
                         // Log.d(TAG, "LSB: " + lsb + " MSB: " + msb);
-                        double temp = ((msb & 0xFF << 8) | lsb & 0xFF) / 10.0;
+                        double temp = toInt(b) / 10.0;
                         mTempDbRef.setValue(temp);
                         setMotorSpeed(temp);
                         // Log.d(TAG, "Temp: " + temp);
@@ -166,6 +197,22 @@ public class MainActivity extends Activity {
                 }
             }
         }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        mAdc3In.setValue(readADC("ADC3IN"));
+                        mAdc4In.setValue(readADC("ADC4IN"));
+                        mAdc5In.setValue(readADC("ADC5IN"));
+                        Thread.sleep(400);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -181,7 +228,54 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void readTemperature() {
+    private int readADC(String ADC) {
+        byte[] b;
+        int val = 0;
 
+        try {
+            switch (ADC) {
+                case "ADC3IN":
+                    b = new byte[2];
+                    b[0] = mDevice.readRegByte(0x07);
+                    b[1] = mDevice.readRegByte(0x08);
+                    val = toInt(b);
+                    break;
+
+                case "ADC4IN":
+                    b = new byte[2];
+                    b[0] = mDevice.readRegByte(0x09);
+                    b[1] = mDevice.readRegByte(0x0a);
+                    val = toInt(b);
+                    break;
+
+                case "ADC5IN":
+                    b = new byte[2];
+                    b[0] = mDevice.readRegByte(0x0b);
+                    b[1] = mDevice.readRegByte(0x0c);
+                    val = toInt(b);
+                    break;
+
+                default:
+                    b = new byte[2];
+                    b[0] = mDevice.readRegByte(0x07);
+                    b[1] = mDevice.readRegByte(0x08);
+                    val = toInt(b);
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return val;
+    }
+
+    /**
+     * https://stackoverflow.com/questions/44040416/convert-two-unsigned-bytes-to-an-int-in-java
+     * @param b
+     * @return
+     */
+    private int toInt(byte[] b) {
+        int x = (0 << 24) | (0 << 16)
+                | ((b[1] & 0xFF) << 8) | ((b[0] & 0xFF) << 0);
+        return x;
     }
 }
