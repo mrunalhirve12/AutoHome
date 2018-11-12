@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">AutoHome</string>
+    <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="channel_adc3">Channel ADC3</string>
+    <string name="channel_adc4">Channel ADC4</string>
+    <string name="channel_adc5">Channel ADC5</string>
+    <string name="dac1out">DAC1OUT</string>
+    <string name="pwm6">PWM6-MOTOR DUTY</string>
+    <string name="pwm4">PWM4</string>
+    <string name="pwm5">PWM5</string>
+    <string name="pwm3">PWM3</string>
 </resources>
