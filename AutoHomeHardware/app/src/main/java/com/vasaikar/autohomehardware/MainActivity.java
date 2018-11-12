@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManager;
 import com.google.firebase.database.DataSnapshot;
@@ -53,6 +54,9 @@ public class MainActivity extends Activity {
     DatabaseReference mAdc3In;
     DatabaseReference mAdc4In;
     DatabaseReference mAdc5In;
+    Gpio mLedGpio;
+    Thread mBlinkLed;
+    volatile boolean mStopBlinking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class MainActivity extends Activity {
 
         try {
             PeripheralManager manager = PeripheralManager.getInstance();
+            mLedGpio = manager.openGpio("BCM17");
             mDevice = manager.openI2cDevice("I2C1", 0x08);
         } catch (IOException e) {
             Log.d(TAG, "Unable to open I2C Device.");
@@ -77,6 +82,7 @@ public class MainActivity extends Activity {
         mAdc3In = mDbRef.child("ADC3IN");
         mAdc4In = mDbRef.child("ADC4IN");
         mAdc5In = mDbRef.child("ADC5IN");
+        mStopBlinking = false;
 
         mPwm3DbRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -87,6 +93,7 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM3");
                     e.printStackTrace();
+                    setLed();
                 }
             }
 
@@ -105,6 +112,7 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM4");
                     e.printStackTrace();
+                    setLed();
                 }
             }
 
@@ -142,6 +150,7 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM5");
                     e.printStackTrace();
+                    setLed();
                 }
             }
 
@@ -168,6 +177,7 @@ public class MainActivity extends Activity {
                     }
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
+                    setLed();
                 }
             }
             private void setMotorSpeed(double temp) {
@@ -194,6 +204,7 @@ public class MainActivity extends Activity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    setLed();
                 }
             }
         }).start();
@@ -213,6 +224,28 @@ public class MainActivity extends Activity {
                 }
             }
         }).start();
+
+        mBlinkLed = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+                    while (!mStopBlinking) {
+                        mLedGpio.setValue(true);
+                        //Log.d("LedDemo", "Before delay");
+                        Thread.sleep(400);
+                        //Log.d("LedDemo", "After delay");
+                        mLedGpio.setValue(false);
+                        Thread.sleep(400);
+                    }
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                    setLed();
+                }
+            }
+        });
+
+        mBlinkLed.start();
     }
 
     @Override
@@ -224,6 +257,16 @@ public class MainActivity extends Activity {
                 mDevice = null;
             } catch (IOException e) {
                 Log.w(TAG, "Unable to close I2C device", e);
+                setLed();
+            }
+        }
+        if (mLedGpio != null) {
+            try {
+                mLedGpio.close();
+                mLedGpio = null;
+            } catch (IOException e) {
+                Log.w(TAG, "Unable to close GPIO device", e);
+                setLed();
             }
         }
     }
@@ -264,8 +307,18 @@ public class MainActivity extends Activity {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            setLed();
         }
         return val;
+    }
+
+    private void setLed() {
+        mStopBlinking = true;
+        try {
+            mLedGpio.setValue(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
