@@ -130,31 +130,31 @@
         app:layout_constraintTop_toBottomOf="@+id/DAC1OUTTextView" />
 
     <Button
-        android:id="@+id/addButton"
+        android:id="@+id/subButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
-        android:text="+"
+        android:text="-"
         app:layout_constraintEnd_toStartOf="@+id/DAC1OUTValueTextView"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC3ValueTextView"
-        tools:text="+" />
+        tools:text="-" />
 
     <Button
-        android:id="@+id/subButton"
+        android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
-        android:text="-"
+        android:text="+"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/DAC1OUTValueTextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC5ValueTextView"
-        tools:text="-" />
+        tools:text="+" />
 
     <TextView
         android:id="@+id/PWM3TextView"
