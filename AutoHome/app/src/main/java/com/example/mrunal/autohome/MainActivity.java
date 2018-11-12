@@ -76,10 +76,17 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     mDAC1count = Integer.parseInt(mDAC1OutTextView.getText().toString());
+                    if (mDAC1count < 31 ){
+                        mDAC1count ++;
+                        mDAC1OutTextView.setText(String.valueOf(mDAC1count));
+                        mDAC1OutValue.setValue(mDAC1count);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Range 0 to 31", Toast.LENGTH_LONG).show();
+                    }
                 }
-                mDAC1count ++;
-                mDAC1OutTextView.setText(String.valueOf(mDAC1count));
-                mDAC1OutValue.setValue(mDAC1count);
+
+
 
             }
         });
