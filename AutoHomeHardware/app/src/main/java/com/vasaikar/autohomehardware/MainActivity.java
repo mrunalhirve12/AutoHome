@@ -173,7 +173,7 @@ public class MainActivity extends Activity {
                         mTempDbRef.setValue(temp);
                         setMotorSpeed(temp);
                         // Log.d(TAG, "Temp: " + temp);
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     }
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -217,7 +217,7 @@ public class MainActivity extends Activity {
                         mAdc3In.setValue(readADC("ADC3IN"));
                         mAdc4In.setValue(readADC("ADC4IN"));
                         mAdc5In.setValue(readADC("ADC5IN"));
-                        Thread.sleep(400);
+                        Thread.sleep(2000);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
