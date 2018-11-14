@@ -8,17 +8,16 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    //instance variables
     private static int mDAC1count;
     TextView mDAC1OutTextView, mTempTextView, mChannelADC3TextView, mChannelADC4TextView, mChannelADC5TextView;
     Button mAdd;
@@ -38,12 +37,16 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mADC5Value;
     DatabaseReference mPWM6Value;
 
+    /**
+     * Method Responsible to create activity
+     * @param savedInstanceState saves the state of the object*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setLogo(R.drawable.autohome_icon_fg);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
+//        getSupportActionBar().setLogo(R.drawable.autohome_icon_fg);
+//        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         mDAC1OutTextView = findViewById(R.id.DAC1OUTValueTextView);
         mTempTextView = findViewById(R.id.tempTextView);
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         mPWM5bar = findViewById(R.id.PWM5SeekBar);
         mPWM6ProgressBar = findViewById(R.id.PWM6ProgressBar);
 
+        //creating reference to Firebase database
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
@@ -70,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         mADC5Value = myRef.child("ADC5IN");
         mPWM6Value = myRef.child("PWM6");
 
+        /**
+         * Method sets onClickListener on Add button to increase the DAC1OUT temperature
+         * @param View.OnClickListener  registers a callback to be invoked
+         * when the view is clicked */
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets onClickListener on Add button to decrease the DAC1OUT temperature
+         * @param View.OnClickListener  registers a callback to be invoked
+         * when the view is clicked */
         mSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets onnSeekBarChangeListener on seekbar to change the RGB LED red value
+         * @param OnSeekBarChangeListener() callback that notifies clients when the progress
+         * level has been changed.
+         * Reference : https://firebase.google.com/docs/reference/android/com/google/firebase/database/ValueEventListener
+         */
         mPWM3bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser){
@@ -128,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets onnSeekBarChangeListener on seekbar to change the RGB LED green value
+         * @param OnSeekBarChangeListener() callback that notifies clients when the progress
+         * level has been changed.
+         */
         mPWM4bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -143,6 +166,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets onnSeekBarChangeListener on seekbar to change the RGB LED blue value
+         * @param OnSeekBarChangeListener() callback that notifies clients when the progress
+         * level has been changed.
+         */
         mPWM5bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -160,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addValueEventListener on TempValue
+         * @param ValueEventListener() receive events about changing Ambient temperature
+         */
         mTempValue.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -172,6 +204,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addValueEventListener on ADC3 value
+         * @param ValueEventListener() receive events about changing ADC3 value
+         */
         mADC3Value.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -184,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addValueEventListener on ADC4 value
+         * @param ValueEventListener() receive events about changing ADC4 value
+         */
         mADC4Value.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -196,6 +236,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addValueEventListener on ADC5 value
+         * @param ValueEventListener() receive events about changing ADC5 value
+         */
         mADC5Value.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -208,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addValueEventListener on PWM6 value
+         * @param ValueEventListener() receive events about changing PWM6 value via progress bar
+         */
         mPWM6Value.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -220,6 +268,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Method sets addListenerForSingleValueEvent on all values at start through the firebase
+         * @param ValueEventListener() to notify the single event listener at start of the event.
+         */
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
