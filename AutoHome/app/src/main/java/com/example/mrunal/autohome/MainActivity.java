@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setLogo(R.drawable.autohome_icon_fg);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         mDAC1OutTextView = findViewById(R.id.DAC1OUTValueTextView);
         mTempTextView = findViewById(R.id.tempTextView);
@@ -85,9 +87,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Range 0 to 31", Toast.LENGTH_LONG).show();
                     }
                 }
-
-
-
             }
         });
 
@@ -229,6 +228,11 @@ public class MainActivity extends AppCompatActivity {
                 mPWM3bar.setProgress(dataSnapshot.child("PWM3").getValue(Integer.class), true);
                 mPWM4bar.setProgress(dataSnapshot.child("PWM4").getValue(Integer.class), true);
                 mPWM5bar.setProgress(dataSnapshot.child("PWM5").getValue(Integer.class), true);
+                mTempTextView.setText(dataSnapshot.child("ADA5IN").getValue(Double.class).toString());
+                mChannelADC3TextView.setText(dataSnapshot.child("ADC3IN").getValue(Integer.class).toString());
+                mChannelADC4TextView.setText(dataSnapshot.child("ADC4IN").getValue(Integer.class).toString());
+                mChannelADC5TextView.setText(dataSnapshot.child("ADC5IN").getValue(Integer.class).toString());
+                mPWM6ProgressBar.setProgress(dataSnapshot.child("PWM6").getValue(Integer.class), true);
             }
 
             @Override
