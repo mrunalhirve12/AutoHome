@@ -11,8 +11,9 @@
         android:layout_width="40dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
-        android:text="12.5"
+        android:fontFamily="@font/fira_mono"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/ambientTempTextView"
         app:layout_constraintStart_toStartOf="@+id/ambientTempTextView"
         app:layout_constraintTop_toBottomOf="@+id/ambientTempTextView" />
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/ambient_temperature"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,81 +35,85 @@
         android:layout_width="90dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="65dp"
         android:contentDescription="@string/channel_adc5"
-        android:text="Channel_ADC3"
+        android:text="ADC3"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/ChannelADC4TextView" />
 
     <TextView
         android:id="@+id/ChannelADC4TextView"
         android:layout_width="90dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="65dp"
         android:contentDescription="@string/channel_adc4"
-        android:text="Channel_ADC4"
+        android:text="ADC4"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/ChannelADC3TextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/ChannelADC5TextView" />
 
     <TextView
         android:id="@+id/ChannelADC5TextView"
         android:layout_width="90dp"
         android:layout_height="25dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="65dp"
         android:contentDescription="@string/channel_adc5"
-        android:text="Channel_ADC5"
+        android:text="ADC5"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/ChannelADC4TextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tempTextView" />
 
     <TextView
         android:id="@+id/ChannelADC3ValueTextView"
         android:layout_width="32dp"
         android:layout_height="23dp"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
-        android:text="511"
+        android:fontFamily="@font/fira_mono"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC3TextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC3TextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC3TextView" />
 
     <TextView
         android:id="@+id/ChannelADC4ValueTextView"
         android:layout_width="32dp"
         android:layout_height="23dp"
-        android:layout_marginStart="80dp"
         android:layout_marginTop="16dp"
-        android:text="511"
+        android:fontFamily="@font/fira_mono"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/ChannelADC3ValueTextView"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC4TextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC4TextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC4TextView" />
 
     <TextView
         android:id="@+id/ChannelADC5ValueTextView"
         android:layout_width="32dp"
         android:layout_height="23dp"
-        android:layout_marginStart="80dp"
         android:layout_marginTop="16dp"
-        android:text="511"
+        android:fontFamily="@font/fira_mono"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/ChannelADC4ValueTextView"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC5TextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC5TextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC5TextView" />
 
     <TextView
         android:id="@+id/DAC1OUTTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
         android:text="@string/dac1out"
-        app:layout_constraintStart_toEndOf="@+id/subButton"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC4ValueTextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC4ValueTextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC4ValueTextView" />
 
     <TextView
@@ -115,7 +121,9 @@
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/fira_mono"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/DAC1OUTTextView"
         app:layout_constraintStart_toStartOf="@+id/DAC1OUTTextView"
         app:layout_constraintTop_toBottomOf="@+id/DAC1OUTTextView" />
@@ -124,10 +132,10 @@
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:text="+"
-        app:layout_constraintStart_toEndOf="@+id/DAC1OUTTextView"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC5ValueTextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC5ValueTextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC5ValueTextView"
         tools:text="+" />
 
@@ -135,10 +143,10 @@
         android:id="@+id/subButton"
         android:layout_width="89dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:text="-"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ChannelADC3ValueTextView"
+        app:layout_constraintStart_toStartOf="@+id/ChannelADC3ValueTextView"
         app:layout_constraintTop_toBottomOf="@+id/ChannelADC3ValueTextView"
         tools:text="-" />
 
@@ -146,11 +154,12 @@
         android:id="@+id/PWM3TextView"
         android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/pwm6"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/DAC1OUTValueTextView"
+        app:layout_constraintStart_toStartOf="@+id/DAC1OUTValueTextView"
         app:layout_constraintTop_toBottomOf="@+id/DAC1OUTValueTextView" />
 
     <ProgressBar
@@ -158,20 +167,23 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="303dp"
         android:layout_height="75dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:progressTint="@color/orange"
+        android:progressBackgroundTint="@color/orange"
+        app:layout_constraintEnd_toEndOf="@+id/PWM3TextView"
+        app:layout_constraintStart_toStartOf="@+id/PWM3TextView"
         app:layout_constraintTop_toBottomOf="@+id/PWM3TextView" />
 
     <TextView
         android:id="@+id/PWM4TextView"
         android:layout_width="59dp"
         android:layout_height="21dp"
-        android:layout_marginStart="128dp"
         android:layout_marginTop="65dp"
+        android:layout_marginEnd="128dp"
         android:text="@string/pwm3"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/tempTextView"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -181,6 +193,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/pwm4"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/PWM3SeekBar"
         app:layout_constraintStart_toStartOf="@+id/PWM3SeekBar"
         app:layout_constraintTop_toBottomOf="@+id/PWM3SeekBar" />
@@ -191,6 +204,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
         android:max="100"
+        android:thumbTint="@color/red"
         app:layout_constraintEnd_toEndOf="@+id/PWM4TextView"
         app:layout_constraintStart_toStartOf="@+id/PWM4TextView"
         app:layout_constraintTop_toBottomOf="@+id/PWM4TextView" />
@@ -201,6 +215,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="8dp"
         android:max="100"
+        android:thumbTint="@color/green"
         app:layout_constraintEnd_toEndOf="@+id/PWM5TextView"
         app:layout_constraintStart_toStartOf="@+id/PWM5TextView"
         app:layout_constraintTop_toBottomOf="@+id/PWM5TextView" />
@@ -211,6 +226,7 @@
         android:layout_height="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/pwm5"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="@+id/PWM4SeekBar"
         app:layout_constraintStart_toStartOf="@+id/PWM4SeekBar"
         app:layout_constraintTop_toBottomOf="@+id/PWM4SeekBar" />
@@ -221,6 +237,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="16dp"
         android:max="100"
+        android:thumbTint="@color/blue"
         app:layout_constraintEnd_toEndOf="@+id/PWM6TextView"
         app:layout_constraintStart_toStartOf="@+id/PWM6TextView"
         app:layout_constraintTop_toBottomOf="@+id/PWM6TextView" />
