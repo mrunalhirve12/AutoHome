@@ -1,10 +1,8 @@
 package com.vasaikar.autohomehardware;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothClass;
-import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.util.Locale;
+import java.util.Date;
 
 /**
  * Skeleton of an Android Things activity.
@@ -54,6 +52,7 @@ public class MainActivity extends Activity {
     DatabaseReference mAdc3In;
     DatabaseReference mAdc4In;
     DatabaseReference mAdc5In;
+    DatabaseReference mTimeStamp;
     Gpio mLedGpio;
     Thread mBlinkLed;
     volatile boolean mStopBlinking;
@@ -82,6 +81,7 @@ public class MainActivity extends Activity {
         mAdc3In = mDbRef.child("ADC3IN");
         mAdc4In = mDbRef.child("ADC4IN");
         mAdc5In = mDbRef.child("ADC5IN");
+        mTimeStamp = mDbRef.child("TIMESTAMP");
         mStopBlinking = false;
 
         mPwm3DbRef.addValueEventListener(new ValueEventListener() {
@@ -171,6 +171,7 @@ public class MainActivity extends Activity {
                         // Log.d(TAG, "LSB: " + lsb + " MSB: " + msb);
                         double temp = toInt(b) / 10.0;
                         mTempDbRef.setValue(temp);
+                        updateTimestamp();
                         setMotorSpeed(temp);
                         // Log.d(TAG, "Temp: " + temp);
                         Thread.sleep(3000);
@@ -206,6 +207,7 @@ public class MainActivity extends Activity {
                     e.printStackTrace();
                     setLed();
                 }
+                updateTimestamp();
             }
         }).start();
 
@@ -217,6 +219,7 @@ public class MainActivity extends Activity {
                         mAdc3In.setValue(readADC("ADC3IN"));
                         mAdc4In.setValue(readADC("ADC4IN"));
                         mAdc5In.setValue(readADC("ADC5IN"));
+                        updateTimestamp();
                         Thread.sleep(2000);
                     }
                 } catch (InterruptedException e) {
@@ -330,5 +333,11 @@ public class MainActivity extends Activity {
         int x = (0 << 24) | (0 << 16)
                 | ((b[1] & 0xFF) << 8) | ((b[0] & 0xFF) << 0);
         return x;
+    }
+
+    private void updateTimestamp(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date now = new Date();
+        mTimeStamp.setValue(sdf.format(now));
     }
 }
