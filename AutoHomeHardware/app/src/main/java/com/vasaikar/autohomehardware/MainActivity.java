@@ -19,23 +19,10 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Skeleton of an Android Things activity.
- * <p>
- * Android Things peripheral APIs are accessible through the class
- * PeripheralManagerService. For example, the snippet below will open a GPIO pin and
- * set it to HIGH:
- *
- * <pre>{@code
- * PeripheralManagerService service = new PeripheralManagerService();
- * mLedGpio = service.openGpio("BCM6");
- * mLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
- * mLedGpio.setValue(true);
- * }</pre>
- * <p>
- * For more complex peripherals, look for an existing user-space driver, or implement one if none
- * is available.
- *
- * @see <a href="https://github.com/androidthings/contrib-drivers#readme">https://github.com/androidthings/contrib-drivers#readme</a>
+ * The Main activity of the app that runs interfaces with the
+ * PIC and Firebase.
+ * @author Shubham Vasaikar
+ * @version 1.0
  */
 public class MainActivity extends Activity {
     public final String TAG = "com.vasaikar.AutoHomeHardware";
@@ -57,6 +44,13 @@ public class MainActivity extends Activity {
     Thread mBlinkLed;
     volatile boolean mStopBlinking;
 
+    /**
+     * Called when the app is run on the Raspberry Pi.
+     * Purposely not set to run at boot as it does not
+     * allow easy configuration changes like WiFi using
+     * the display out.
+     * @param savedInstanceState unused
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +79,11 @@ public class MainActivity extends Activity {
         mStopBlinking = false;
 
         mPwm3DbRef.addValueEventListener(new ValueEventListener() {
+            /**
+             * Listen for changes on PWM3 value in Firebase DB and write to
+             * PIC register.
+             * @param dataSnapshot The instantaneous snapshot of the changed value.
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int pwm3 = dataSnapshot.getValue(Integer.class);
@@ -104,6 +103,11 @@ public class MainActivity extends Activity {
         });
 
         mPwm4DbRef.addValueEventListener(new ValueEventListener() {
+            /**
+             * Listen for changes on PWM4 value in Firebase DB and write to
+             * PIC register.
+             * @param dataSnapshot The instantaneous snapshot of the changed value.
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int pwm4 = dataSnapshot.getValue(Integer.class);
@@ -123,6 +127,11 @@ public class MainActivity extends Activity {
         });
 
         mPwm5DbRef.addValueEventListener(new ValueEventListener() {
+            /**
+             * Listen for changes on PWM4 value in Firebase DB and write to
+             * PIC register.
+             * @param dataSnapshot The instantaneous snapshot of the changed value.
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int pwm5 = dataSnapshot.getValue(Integer.class);
@@ -141,11 +150,16 @@ public class MainActivity extends Activity {
         });
 
         mDac1OutDbRef.addValueEventListener(new ValueEventListener() {
+            /**
+             * Listen for changes on DAC1OUT value in Firebase DB and write to
+             * PIC register.
+             * @param dataSnapshot The instantaneous snapshot of the changed value.
+             */
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int dac1Out = dataSnapshot.getValue(Integer.class);
                 try {
-                    Log.d(TAG, "DAC1OUT: " + (byte) dac1Out);
+                    //Log.d(TAG, "DAC1OUT: " + (byte) dac1Out);
                     mDevice.writeRegByte(0x04, (byte) dac1Out);
                 } catch (IOException e) {
                     Log.d(TAG, "Failed to write to PWM5");
@@ -160,6 +174,8 @@ public class MainActivity extends Activity {
             }
         });
 
+        // Thread to read the temperature value and set the
+        // PWM motor duty cycle accordingly.
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -181,6 +197,12 @@ public class MainActivity extends Activity {
                     setLed();
                 }
             }
+
+            /**
+             * Function to set the motor duty cycle based on the
+             * temperature.
+             * @param temp
+             */
             private void setMotorSpeed(double temp) {
                 try {
                     if (temp <= 15) {
@@ -211,6 +233,8 @@ public class MainActivity extends Activity {
             }
         }).start();
 
+        // Thread to read ADC values and update
+        // the values on the Firebase database.
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -228,11 +252,15 @@ public class MainActivity extends Activity {
             }
         }).start();
 
+        // Thread to blink LED on program start.
         mBlinkLed = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     mLedGpio.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+                    // mStopBlinking is a global boolean variable that will
+                    // ensure that the thread is stopped when the value is
+                    // set to false.
                     while (!mStopBlinking) {
                         mLedGpio.setValue(true);
                         //Log.d("LedDemo", "Before delay");
@@ -248,9 +276,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        mBlinkLed.start();
+        mBlinkLed.start(); // Start blinking LED
     }
 
+    /**
+     * Destroy resources and close connections
+     * to the peripherals.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -274,6 +306,12 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Get the value of the ADC
+     * @param ADC The string of the ADC pin name
+     *            to read value from
+     * @return int value of the register
+     */
     private int readADC(String ADC) {
         byte[] b;
         int val = 0;
@@ -315,6 +353,9 @@ public class MainActivity extends Activity {
         return val;
     }
 
+    /**
+     * Set the LED in case of an exceptiom.
+     */
     private void setLed() {
         mStopBlinking = true;
         try {
@@ -325,9 +366,10 @@ public class MainActivity extends Activity {
     }
 
     /**
+     * Convert the byte array to an integer.
      * https://stackoverflow.com/questions/44040416/convert-two-unsigned-bytes-to-an-int-in-java
      * @param b
-     * @return
+     * @return int representation of the byte array.
      */
     private int toInt(byte[] b) {
         int x = (0 << 24) | (0 << 16)
@@ -335,6 +377,9 @@ public class MainActivity extends Activity {
         return x;
     }
 
+    /**
+     * Update the timestamp in the Firebase DB whenever a change is made.
+     */
     private void updateTimestamp(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date now = new Date();
